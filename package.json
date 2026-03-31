@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.13.6",
     "bcryptjs": "^3.0.3",
@@ -19,8 +20,10 @@
     "mongoose": "^9.3.3",
     "next": "^16.0.0",
     "next-auth": "^5.0.0-beta.30",
+    "prismjs": "^1.30.0",
     "react": "18",
     "react-dom": "18",
+    "react-simple-code-editor": "^0.14.1",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
@@ -36,6 +39,7 @@
   },
   "overrides": {
     "minimatch": "^10.2.1",
-    "ajv": "^8.18.0"
+    "ajv": "^8.18.0",
+    "dompurify": "^3.0.8"
   }
 }
