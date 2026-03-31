@@ -3,15 +3,22 @@ import Note from "@/app/lib/models/Note";
 import { connectDB } from "@/app/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
+// Define the params type
+type RouteParams = {
+  params: Promise<{ id: string }>;
+};
+
 // GET /api/notes/[id] - Get a single note
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     await connectDB();
 
-    const { id } = params;
+    // Await the params since it's now a Promise in Next.js 14+
+    const { id } = await params;
+
     const note = await Note.findById(id).lean();
 
     if (!note) {
@@ -47,12 +54,14 @@ export async function GET(
 // PUT /api/notes/[id] - Update a note
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     await connectDB();
 
-    const { id } = params;
+    // Await the params
+    const { id } = await params;
+
     const body = await request.json();
     const { description, content, keyword, is_sensitive, dates } = body;
 
@@ -106,7 +115,11 @@ export async function PUT(
     };
 
     return NextResponse.json(
-      { success: true, data: responseNote, message: "Note updated successfully" },
+      {
+        success: true,
+        data: responseNote,
+        message: "Note updated successfully",
+      },
       { status: 200 }
     );
   } catch (error: any) {
@@ -121,12 +134,14 @@ export async function PUT(
 // DELETE /api/notes/[id] - Delete a note
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     await connectDB();
 
-    const { id } = params;
+    // Await the params
+    const { id } = await params;
+
     const deletedNote = await Note.findByIdAndDelete(id);
 
     if (!deletedNote) {
