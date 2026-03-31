@@ -87,7 +87,6 @@ const NoteModal: React.FC<NoteModalProps> = ({
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -97,176 +96,153 @@ const NoteModal: React.FC<NoteModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">
-              {isEditMode ? "Edit Note" : "Create New Note"}
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition p-1 rounded-lg hover:bg-gray-100"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <div className="relative w-full max-w-6xl rounded-4xl bg-white shadow-[0_35px_60px_-15px_rgba(16,185,129,0.35)] border border-emerald-100 overflow-hidden">
+          <div className="bg-linear-to-r from-emerald-600 via-emerald-500 to-teal-500 px-8 py-6 text-white">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-semibold tracking-tight">
+                  {isEditMode ? "Update your note" : "Create note"}
+                </h2>
+              </div>
+              <button
+                onClick={onClose}
+                className="rounded-2xl bg-white/10 p-2 transition hover:bg-white/20"
+                aria-label="Close modal"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter note description"
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 placeholder-gray-400 ${
-                  errors.description ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.description && (
-                <p className="text-red-500 text-xs mt-1">{errors.description}</p>
-              )}
+          <form onSubmit={handleSubmit} className="px-8 py-8 space-y-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-slate-700">
+                  Description
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Capture the note title"
+                  className={`w-full rounded-3xl border px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition ${
+                    errors.description ? "border-red-300" : "border-slate-200"
+                  }`}
+                />
+                {errors.description && (
+                  <p className="text-sm text-red-600">{errors.description}</p>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-slate-700">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  name="dates"
+                  value={formData.dates}
+                  onChange={handleChange}
+                  className={`w-full rounded-3xl border px-4 py-3 text-slate-900 shadow-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition ${
+                    errors.dates ? "border-red-300" : "border-slate-200"
+                  }`}
+                />
+                {errors.dates && (
+                  <p className="text-sm text-red-600">{errors.dates}</p>
+                )}
+              </div>
             </div>
 
-            {/* Content */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Content <span className="text-red-500">*</span>
+              <label className="block text-sm font-semibold text-slate-700 mb-3">
+                Content
               </label>
               <textarea
                 name="content"
                 value={formData.content}
                 onChange={handleChange}
-                placeholder="Enter note content"
-                rows={5}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 placeholder-gray-400 resize-vertical ${
-                  errors.content ? "border-red-500" : "border-gray-300"
+                placeholder="Write the note content here..."
+                rows={7}
+                className={`w-full rounded-[28px] border px-4 py-4 text-slate-900 placeholder-slate-400 shadow-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition textarea-scrollbar-rounded ${
+                  errors.content ? "border-red-300" : "border-slate-200"
                 }`}
               />
               {errors.content && (
-                <p className="text-red-500 text-xs mt-1">{errors.content}</p>
+                <p className="text-sm text-red-600 mt-2">{errors.content}</p>
               )}
             </div>
 
-            {/* Keywords */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Keywords
-              </label>
-              <input
-                type="text"
-                name="keyword"
-                value={formData.keyword}
-                onChange={handleChange}
-                placeholder="Enter keywords separated by commas"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 placeholder-gray-400"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Separate multiple keywords with commas (e.g., personal, work, ideas)
-              </p>
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-slate-700">
+                  Keywords
+                </label>
+                <input
+                  type="text"
+                  name="keyword"
+                  value={formData.keyword}
+                  onChange={handleChange}
+                  placeholder="personal, work, idea"
+                  className="w-full rounded-3xl border border-slate-200 px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+                />
+                <p className="text-xs text-slate-500">
+                  Separate keywords with commas.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-slate-700">Sensitive</label>
+                <div className="flex items-center gap-3 p-4 rounded-[28px] border border-emerald-100 bg-emerald-50">
+                  <input
+                    type="checkbox"
+                    name="is_sensitive"
+                    id="is_sensitive"
+                    checked={formData.is_sensitive}
+                    onChange={handleChange}
+                    className="h-5 w-5 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-400"
+                  />
+                  <label htmlFor="is_sensitive" className="text-sm font-medium text-slate-700">
+                    Keep this note encrypted
+                  </label>
+                </div>
+              </div>
             </div>
 
-            {/* Date */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="date"
-                name="dates"
-                value={formData.dates}
-                onChange={handleChange}
-                className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 ${
-                  errors.dates ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.dates && (
-                <p className="text-red-500 text-xs mt-1">{errors.dates}</p>
-              )}
-            </div>
-
-            {/* Is Sensitive */}
-            <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
-              <input
-                type="checkbox"
-                name="is_sensitive"
-                id="is_sensitive"
-                checked={formData.is_sensitive}
-                onChange={handleChange}
-                className="w-4 h-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"
-              />
-              <label
-                htmlFor="is_sensitive"
-                className="text-sm font-medium text-amber-800"
-              >
-                🔒 Mark as sensitive (content will be encrypted)
-              </label>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end sm:items-center pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={isLoading}
-                className="px-5 py-2.5 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium disabled:opacity-50"
+                className="rounded-3xl border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isLoading}
-                className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 flex items-center gap-2"
+                className="rounded-3xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/40 hover:bg-emerald-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {isLoading && (
-                  <svg
-                    className="animate-spin h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
-                  </svg>
-                )}
-                {isEditMode ? "Update Note" : "Create Note"}
+                {isLoading ? "Saving..." : isEditMode ? "Update Note" : "Save Note"}
               </button>
             </div>
           </form>
