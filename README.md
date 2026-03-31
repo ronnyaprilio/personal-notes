@@ -1,188 +1,76 @@
-# Next.js Auth Archetype
+# 📒 Personal Notes App
 
-A starter template for authentication and user management built on the App Router.
+A secure personal notes management application built with **Next.js 14**, **TypeScript**, **MongoDB**, and **Tailwind CSS**. Features full CRUD operations, AES encryption for sensitive notes, and advanced search functionality.
 
-* Next.js App Router (16+)
-* TypeScript
-* NextAuth (Auth.js v5 beta)
-* MongoDB via Mongoose
-* Credential‑based login with bcrypt
-* reCAPTCHA verification + rate‑limiting
-* Protected server‑rendered routes
-* Optional security headers added in `next.config.ts`
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![MongoDB](https://img.shields.io/badge/MongoDB-8-green?style=flat-square&logo=mongodb)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?style=flat-square&logo=tailwind-css)
 
 ---
 
-## ✨ Purpose
+## 📋 Table of Contents
 
-This project serves as a **base archetype** so new applications can start with a secure, full‑stack auth system already in place.  It demonstrates common real‑world patterns such as a database back end, brute‑force protection, and deploy‑ready configuration.
-
-Ideal for:
-
-1. New project boilerplates
-2. Production‑ready starters
-3. Fullstack app foundations
-
----
-
-## 📦 Tech Stack
-
-* **Next.js 16** (App Router)
-* **React 18**
-* **TypeScript**
-* **NextAuth v5** (Auth.js) – Credentials provider with JWT sessions
-* **MongoDB & Mongoose** for user storage
-* **bcryptjs** for password hashing
-* **reCAPTCHA** (v3) via Google
-* **Axios** for outgoing HTTP calls
-* **Tailwind CSS 4** and `clsx` / `tailwind-merge` for styling
-* Simple in‑memory **rate limiting** utility
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Project Structure](#-project-structure)
+- [Configuration](#-configuration)
+- [Running the Application](#-running-the-application)
+- [API Documentation](#-api-documentation)
+- [Data Model](#-data-model)
+- [Encryption](#-encryption)
+- [Search Functionality](#-search-functionality)
+- [Screenshots](#-screenshots)
+- [Known Limitations](#-known-limitations)
+- [Future Improvements](#-future-improvements)
+- [Troubleshooting](#-troubleshooting)
+- [License](#-license)
 
 ---
 
-## 📁 Project Structure
+## ✨ Features
 
-```
-/app
-  /api/auth/[...nextauth]/route.ts      # NextAuth handlers
-  /components
-    LogoutButton.tsx
-  /dashboard/page.tsx                   # protected page
-  page.tsx                              # login form
-  /lib
-    mongodb.ts                          # Mongo connection helper
-    models/User.ts                      # Mongoose user model
-    rate-limit.ts                       # simple rate limiter
-/auth.ts                                 # NextAuth config + logic
-/seed.js                                  # script to create initial admin user
-next.config.ts                            # includes security headers
-.env.local                                # environment variables
-```
+- **Full CRUD Operations** — Create, Read, Update, and Delete personal notes
+- **Sensitive Content Encryption** — AES-256 encryption for notes marked as sensitive
+- **Advanced Search** — Search notes by keyword, description, or content
+- **Date Range Filtering** — Filter notes by date range (from/to)
+- **Modal-Based Forms** — Clean modal interface for creating and editing notes
+- **Keyword Tagging** — Tag notes with multiple keywords for easy categorization
+- **Toggle Sensitive Content** — Show/hide encrypted content on the UI
+- **Responsive Design** — Fully responsive layout for desktop, tablet, and mobile
+- **Toast Notifications** — Real-time feedback for all operations
+- **Auto-Generated Note IDs** — Unique note IDs generated automatically
+- **MongoDB Text Indexing** — Efficient database-level search indexing
 
 ---
 
-## 🔐 Authentication System
+## 🛠 Tech Stack
 
-Credentials are verified against a MongoDB collection.  On each sign‑in attempt we:
-
-1. Connect to the database (`app/lib/mongodb.ts`).
-2. Check the client IP against an in‑memory rate limiter (`app/lib/rate-limit.ts`).
-3. Validate the reCAPTCHA token with Google (secret key stored in `.env.local`).
-4. Look up the user by `username` and compare the bcrypt‑hashed password.
-
-The login form (in `app/page.tsx`) sends `username`, `password` and a `recaptchaToken` to the provider.
-
-Sample credentials are initially seeded using `seed.js` (run with `node seed.js` after configuring the env file).
-
-Protected routes guard access with:
-
-```ts
-const session = await auth();
-if (!session) redirect('/login');
-```
+| Technology | Purpose |
+|---|---|
+| [Next.js 14](https://nextjs.org/) | React framework with App Router |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe JavaScript |
+| [MongoDB](https://www.mongodb.com/) | NoSQL database |
+| [Mongoose](https://mongoosejs.com/) | MongoDB ODM |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
+| [crypto-js](https://www.npmjs.com/package/crypto-js) | AES encryption/decryption |
 
 ---
 
-## ⚙️ Setup
+## 📦 Prerequisites
 
-1. Clone the repo and switch to its directory.
-2. Copy `.env.local.example` (or create `.env.local`) and define the variables listed below.
-3. Install dependencies:
+Before you begin, ensure you have the following installed:
+
+- **Node.js** >= 18.x — [Download](https://nodejs.org/)
+- **npm** >= 9.x (comes with Node.js)
+- **MongoDB** >= 6.x — [Download](https://www.mongodb.com/try/download/community) or use [MongoDB Atlas](https://www.mongodb.com/atlas)
+- **Git** — [Download](https://git-scm.com/)
+
+Verify your installations:
 
 ```bash
-npm install
-```
-
-4. Seed the first admin user:
-
-```bash
-node seed.js
-```
-
-5. Run the development server:
-
-```bash
-npm run dev
-```
-
----
-
-## 🔑 Environment Variables
-
-Create a file named `.env.local` with the following keys:
-
-```env
-# application secrets
-AUTH_SECRET=<random-base64-32>
-
-# full URL of your app (required by NextAuth)
-NEXTAUTH_URL=http://localhost:3000
-
-# database
-MONGODB_URI=<your-mongo-connection-string>
-
-# initial admin for seeding script
-INIT_ADMIN_USERNAME=<desired-username>
-INIT_ADMIN_PASSWORD=<desired-password>
-
-# reCAPTCHA (v3)
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=<your-site-key>
-RECAPTCHA_SECRET_KEY=<your-secret-key>
-```
-
-You can generate `AUTH_SECRET` with:
-
-```bash
-echo $(openssl rand -base64 32)
-```
-
----
-
-## 🚪 Login Flow
-
-```
-Login Page → signIn() → reCAPTCHA check → DB lookup → JWT session → Redirect to Dashboard
-Dashboard → auth() check → Access allowed / Redirect to Login
-Logout → signOut() → Session destroyed
-```
-
----
-
-## 🛡️ Route Protection
-
-Server components guard dashboard routes:
-
-```ts
-if (!session) {
-  redirect("/login");
-}
-```
-
----
-
-## 📌 Notes
-
-* NextAuth v5 now returns `{ handlers, auth, signIn, signOut }` rather than a default export.
-* Security headers are injected globally from `next.config.ts`.
-* The `seed.js` script should only be run once — it checks for an existing user and exits if found.
-
----
-
-## 🚀 Future Improvements
-
-* OAuth login (Google / GitHub)
-* Role‑based authorization
-* Middleware for global route protection
-* UI component library integration
-* Persistent rate‑limit storage (Redis/cache)
-
----
-
-## 📄 License
-
-Free to use for personal or commercial starter templates.
-
----
-
-**Archetype Philosophy:**
-A reusable foundation with production‑focused auth best practices.
+node --version    # Should output v18.x.x or higher
+npm --version     # Should output 9.x.x or higher
+mongod --version  # Should output db version v6.x or higher
