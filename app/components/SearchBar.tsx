@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 
@@ -30,79 +30,63 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onCreateNew }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+    <div className="bg-white border border-emerald-100 shadow-xl shadow-emerald-200/40 rounded-[28px] p-3 mb-6">
       <div className="flex flex-col gap-4">
-        {/* Search Input and Create Button */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-end gap-3">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search by keyword, description, or content
+            <label className="block text-sm font-semibold text-slate-700 mb-1">
+              Search notes
             </label>
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type to search notes..."
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900 placeholder-gray-400"
+              placeholder="Search by keyword, description, or content"
+              className="w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 placeholder-slate-400 shadow-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             />
           </div>
-          <div className="flex items-end">
-            <button
-              onClick={onCreateNew}
-              className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium flex items-center justify-center gap-2 shadow-sm"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              New Note
-            </button>
-          </div>
+          <button
+            onClick={onCreateNew}
+            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 text-white px-5 py-2 text-sm font-semibold shadow-lg shadow-emerald-200/50 hover:bg-emerald-700 transition"
+          >
+            <span className="mr-2 text-base">＋</span> New Note
+          </button>
         </div>
 
-        {/* Date Filters */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date From
+        <div className="grid gap-3 sm:grid-cols-3 items-end">
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">
+              Date from
             </label>
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900"
+              className="w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             />
           </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Date To
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">
+              Date to
             </label>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-gray-900"
+              className="w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             />
           </div>
-          <div className="flex items-end gap-2">
+          <div className="flex gap-2">
             <button
               onClick={handleSearch}
-              className="px-6 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition font-medium shadow-sm"
+              className="flex-1 rounded-2xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-emerald-700 transition"
             >
               Search
             </button>
             <button
               onClick={handleClear}
-              className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium"
+              className="flex-1 rounded-2xl border border-slate-200 bg-white text-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-50 transition"
             >
               Clear
             </button>

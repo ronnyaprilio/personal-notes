@@ -41,6 +41,43 @@
   background: #94a3b8;
 }
 
+.mobile-note-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+}
+
+.textarea-scrollbar-rounded {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16,185,129,0.9) rgba(241,245,249,0.9);
+}
+
+.textarea-scrollbar-rounded::-webkit-scrollbar {
+  width: 10px;
+}
+
+.textarea-scrollbar-rounded::-webkit-scrollbar-track {
+  background: rgba(241,245,249,0.9);
+  border-radius: 9999px;
+}
+
+.textarea-scrollbar-rounded::-webkit-scrollbar-thumb {
+  background: rgba(16,185,129,0.85);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.textarea-scrollbar-rounded::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 /* Modal overlay animation */
 .fixed {
   animation: fadeIn 0.15s ease-out;

@@ -140,19 +140,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-emerald-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">📒</span>
+      <header className="bg-linear-to-r from-emerald-600 to-teal-500 shadow-2xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-white/15 text-3xl backdrop-blur">
+              📒
+            </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-3xl font-semibold text-white">
                 Personal Notes
               </h1>
-              <p className="text-sm text-gray-500">
-                Manage your notes securely
-              </p>
             </div>
           </div>
         </div>
@@ -194,7 +193,7 @@ export default function Home() {
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-lg shadow-lg text-white font-medium transition-all transform animate-slide-up ${
+          className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-3xl shadow-2xl text-white font-medium transition-all transform animate-slide-up ${
             toast.type === "success" ? "bg-emerald-600" : "bg-red-600"
           }`}
         >
