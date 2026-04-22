@@ -5,6 +5,7 @@ export interface INoteDocument extends Document {
   description: string;
   content: string;
   keyword: string[];
+  language: string;
   is_sensitive: boolean;
   dates: Date;
   createdAt: Date;
@@ -32,6 +33,27 @@ const NoteSchema: Schema<INoteDocument> = new Schema(
       type: [String],
       default: [],
       index: true,
+    },
+    language: {
+      type: String,
+      default: "plaintext",
+      enum: [
+        "plaintext",
+        "python",
+        "javascript",
+        "typescript",
+        "html",
+        "css",
+        "json",
+        "java",
+        "cpp",
+        "csharp",
+        "go",
+        "rust",
+        "php",
+        "sql",
+        "shell",
+      ],
     },
     is_sensitive: {
       type: Boolean,

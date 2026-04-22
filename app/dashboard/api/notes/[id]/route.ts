@@ -63,7 +63,7 @@ export async function PUT(
     const { id } = await params;
 
     const body = await request.json();
-    const { description, content, keyword, is_sensitive, dates } = body;
+    const { description, content, keyword, language, is_sensitive, dates } = body;
 
     // Validation
     if (!description || !content) {
@@ -100,6 +100,7 @@ export async function PUT(
         description: description.trim(),
         content: processedContent,
         keyword: keywordArray,
+        language: language || "plaintext",
         is_sensitive: is_sensitive || false,
         dates: dates ? new Date(dates) : existingNote.dates,
       },
