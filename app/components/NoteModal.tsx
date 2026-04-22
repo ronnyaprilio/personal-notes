@@ -4,48 +4,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { INote, INoteForm } from "../lib/types";
 import Editor from "@monaco-editor/react";
 
-const detectLanguageSimple = (code: string) => {
-  const text = code.toLowerCase();
-
-  if (text.includes("def ") || text.includes("import ")) return "python";
-  if (text.includes("console.log") || text.includes("function"))
-    return "javascript";
-  if (text.includes("public static void main")) return "java";
-  if (text.includes("#include")) return "cpp";
-  if (text.includes("select") || text.includes("from")) return "sql";
-  if (text.includes("<html") || text.includes("<div")) return "html";
-  if (text.includes("{") && text.includes("}")) return "json";
-
-  return "plaintext";
-};
-
-const getLanguageFromKeyword = (keyword: string) => {
-  const k = keyword.toLowerCase();
-
-  if (k.includes("python") || k.includes("py")) return "python";
-  if (k.includes("javascript") || k.includes("js")) return "javascript";
-  if (k.includes("typescript") || k.includes("ts")) return "typescript";
-  if (k.includes("html")) return "html";
-  if (k.includes("css")) return "css";
-  if (k.includes("json")) return "json";
-  if (k.includes("java")) return "java";
-  if (k.includes("c++") || k.includes("cpp")) return "cpp";
-  if (k.includes("c#")) return "csharp";
-  if (k.includes("go")) return "go";
-  if (k.includes("rust")) return "rust";
-  if (k.includes("php")) return "php";
-  if (k.includes("sql")) return "sql";
-  if (k.includes("bash") || k.includes("shell")) return "shell";
-
-  return null;
-};
-
-const resolveLanguage = (keyword: string, content: string) => {
-  const keywordLang = getLanguageFromKeyword(keyword);
-  if (keywordLang) return keywordLang;
-
-  return detectLanguageSimple(content);
-};
+const SUPPORTED_LANGUAGES = [
+  "plaintext",
+  "python",
+  "javascript",
+  "typescript",
+  "html",
+  "css",
+  "json",
+  "java",
+  "cpp",
+  "csharp",
+  "go",
+  "rust",
+  "php",
+  "sql",
+  "shell",
+];
 
 interface NoteModalProps {
   isOpen: boolean;
@@ -67,6 +42,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
     description: "",
     content: "",
     keyword: "",
+    language: "plaintext",
     is_sensitive: false,
     dates: new Date().toISOString().split("T")[0],
   });
@@ -80,7 +56,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
   const editorRef = useRef<any>(null);
 
   const isEditMode = !!note;
-  const currentLanguage = resolveLanguage(formData.keyword, formData.content);
+  const currentLanguage = formData.language;
   const isPython = currentLanguage === "python";
   const isPlainText = currentLanguage === "plaintext";
   const isProgrammingLanguage = !isPlainText;
@@ -94,6 +70,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
         keyword: Array.isArray(note.keyword)
           ? note.keyword.join(", ")
           : "",
+        language: note.language || "plaintext",
         is_sensitive: note.is_sensitive,
         dates: new Date(note.dates).toISOString().split("T")[0],
       });
@@ -103,6 +80,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
         description: "",
         content: "",
         keyword: "",
+        language: "plaintext",
         is_sensitive: false,
         dates: new Date().toISOString().split("T")[0],
       });
@@ -142,7 +120,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -173,7 +151,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
     setShowOutput(true);
 
     try {
-      const response = await fetch(process.env.LOCAL_PYTHON_COMPILER_API!, {
+      const response = await fetch(process.env.NEXT_PUBLIC_LOCAL_PYTHON_COMPILER_API!, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -290,14 +268,24 @@ const NoteModal: React.FC<NoteModalProps> = ({
                 <label>Sensitive</label>
               </div>
 
+              <div>
+                <label className="text-sm font-semibold">Programming Language</label>
+                <select
+                  name="language"
+                  value={formData.language}
+                  onChange={handleChange}
+                  className="w-full mt-2 border rounded-xl px-3 py-2"
+                >
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <option key={lang} value={lang}>
+                      {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Desktop only */}
               <div className="hidden lg:block">
-                <label className="text-sm font-semibold">
-                  Detected Language
-                </label>
-                <div className="mt-2 border rounded-xl px-3 py-2 bg-gray-50 text-sm">
-                  {currentLanguage}
-                </div>
               </div>
 
               {isProgrammingLanguage && (

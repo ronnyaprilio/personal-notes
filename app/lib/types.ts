@@ -4,6 +4,7 @@ export interface INote {
   description: string;
   content: string;
   keyword: string[];
+  language: string;
   is_sensitive: boolean;
   dates: Date;
   createdAt?: Date;
@@ -15,6 +16,7 @@ export interface INoteForm {
   description: string;
   content: string;
   keyword: string;
+  language: string;
   is_sensitive: boolean;
   dates: string;
 }
